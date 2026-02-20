@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌈 Gay-O-Meter 3000™</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c1: #ff6b6b; --c2: #ffa36c; --c3: #ffd93d; --c4: #6bcb77; --c5: #4d96ff; --c6: #c77dff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: #0f0f1a;
+    font-family: 'Nunito', sans-serif;
+    overflow-x: hidden;
+    color: #fff;
+  }
+
+  .bg-rainbow {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #ff6b6b22, #c77dff22, #4d96ff22);
+    animation: bgpulse 4s ease-in-out infinite alternate;
+  }
+  @keyframes bgpulse {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+  }
+
+  .stars {
+    position: fixed; inset: 0; z-index: 0;
+    background-image: radial-gradient(white 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.04;
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    animation: bounceIn 0.8s cubic-bezier(.36,.07,.19,.97);
+  }
+  @keyframes bounceIn {
+    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+    60% { transform: scale(1.15) rotate(3deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); }
+  }
+
+  .header .logo { font-size: 60px; line-height: 1; }
+  .header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.6rem;
+    background: linear-gradient(90deg, var(--c1), var(--c3), var(--c4), var(--c5), var(--c6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    margin-top: 8px;
+  }
+  .header p {
+    color: #aaa; font-size: 0.9rem; margin-top: 6px;
+    font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  .badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #ff6b6b, #c77dff);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: #1e1e2e;
+    border-radius: 20px;
+    padding: 4px;
+    margin-bottom: 24px;
+    border: 1px solid #333;
+  }
+  .progress-bar {
+    height: 10px;
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--c1), var(--c3), var(--c4), var(--c5), var(--c6));
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .progress-label {
+    text-align: center; font-size: 0.75rem; color: #888; margin-top: 5px;
+    font-weight: 700; letter-spacing: 1px;
+  }
+
+  /* CARD */
+  .card {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 24px;
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    animation: slideUp 0.4s ease;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .q-number {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #c77dff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .q-sub {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 20px;
+  }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    background: #0f0f1a;
+    border: 2px solid #2a2a4a;
+    border-radius: 14px;
+    padding: 12px 18px;
+    color: #ddd;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .option-btn:hover {
+    border-color: #c77dff;
+    color: #fff;
+    background: #1e1e3a;
+    transform: translateX(4px);
+  }
+  .option-btn.selected {
+    border-color: #c77dff;
+    background: linear-gradient(135deg, #1e1e3a, #2a1a3a);
+    color: #fff;
+  }
+  .option-emoji { font-size: 1.2rem; }
+
+  /* SLIDER */
+  .slider-container { margin-top: 10px; }
+  .slider-val {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 8px;
+    color: var(--c3);
+  }
+  input[type=range] {
+    width: 100%;
+    accent-color: #c77dff;
+    height: 6px;
+  }
+  .slider-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.7rem; color: #888; margin-top: 6px;
+  }
+
+  /* IMAGE UPLOAD */
+  .upload-area {
+    border: 2.5px dashed #3a3a5a;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .upload-area:hover { border-color: #c77dff; background: #1e1e3a; }
+  .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .upload-icon { font-size: 3rem; margin-bottom: 8px; }
+  .upload-text { font-size: 0.9rem; font-weight: 700; color: #aaa; }
+  .upload-preview { max-width: 100%; border-radius: 12px; max-height: 200px; display: none; margin: 10px auto 0; }
+  .upload-preview.show { display: block; }
+  .analyzing-text { display: none; font-size: 0.8rem; color: #c77dff; font-weight: 700; margin-top: 8px; }
+
+  /* NEXT BTN */
+  .next-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #c77dff, #4d96ff);
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    color: #fff;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    box-shadow: 0 4px 20px rgba(199, 125, 255, 0.3);
+  }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(199, 125, 255, 0.5); }
+  .next-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* LOADING SCREEN */
+  #loading-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 0;
+  }
+  .loading-spinner {
+    font-size: 4rem;
+    animation: spin 0.6s linear infinite;
+    display: block; margin-bottom: 20px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-bar-wrap {
+    background: #1e1e2e; border-radius: 20px; padding: 4px; margin: 20px 0;
+    border: 1px solid #333;
+  }
+  .loading-bar {
+    height: 14px; border-radius: 20px;
+    background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c5), var(--c6));
+    background-size: 200%;
+    animation: rainbow-move 0.8s linear infinite;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+  @keyframes rainbow-move {
+    from { background-position: 0% 50%; }
+    to { background-position: 100% 50%; }
+  }
+  .loading-steps { font-size: 0.85rem; color: #c77dff; font-weight: 700; min-height: 22px; }
+
+  /* RESULT */
+  #result-screen { display: none; text-align: center; }
+  .result-img-wrap {
+    position: relative; display: inline-block;
+    margin-bottom: 20px;
+  }
+  .result-img {
+    width: 140px; height: 140px; border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid transparent;
+    background: linear-gradient(#1a1a2e, #1a1a2e) padding-box,
+                linear-gradient(135deg, var(--c1), var(--c6)) border-box;
+    display: none;
+  }
+  .result-img.show { display: block; }
+  .result-avatar { font-size: 5rem; display: block; }
+  .result-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    color: #aaa;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .percent-wrap { position: relative; margin: 10px auto 24px; }
+  .big-percent {
+    font-family: 'Fredoka One', cursive;
+    font-size: 7rem;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--c1), var(--c3), var(--c6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: popIn 0.5s cubic-bezier(.36,.07,.19,.97) forwards;
+    opacity: 0;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .result-roast {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 18px;
+    padding: 18px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ddd;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .result-meter {
+    height: 18px; border-radius: 30px;
+    background: linear-gradient(90deg, #4d96ff, #c77dff, #ff6b6b);
+    margin: 16px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .meter-needle {
+    position: absolute; top: -4px;
+    width: 4px; height: 26px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.8);
+    transition: left 1.5s cubic-bezier(.36,.07,.19,.97);
+  }
+  .share-row { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+  .share-btn {
+    background: #1e1e2e; border: 2px solid #3a3a5a;
+    border-radius: 12px; padding: 10px 18px;
+    color: #fff; font-family: 'Nunito', sans-serif;
+    font-weight: 800; font-size: 0.85rem; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .share-btn:hover { border-color: #c77dff; background: #2a1a3a; }
+  .retry-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #ff6b6b, #ffa36c);
+    border: none; border-radius: 16px; padding: 14px;
+    color: #fff; font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem; cursor: pointer; margin-top: 14px;
+    transition: all 0.2s; letter-spacing: 1px;
+  }
+  .retry-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,107,107,0.4); }
+
+  .fun-fact {
+    background: linear-gradient(135deg, #1e1e3a, #2a1a3a);
+    border: 1px solid #3a2a5a;
+    border-radius: 14px; padding: 14px 16px;
+    font-size: 0.8rem; color: #c77dff;
+    font-weight: 700; margin-top: 14px; text-align: left;
+  }
+  .fun-fact span { color: #fff; }
+
+  /* CONFETTI */
+  .confetti-piece {
+    position: fixed; width: 10px; height: 10px;
+    top: -20px; border-radius: 2px;
+    animation: confettiFall linear forwards;
+    z-index: 9999;
+    pointer-events: none;
+  }
+  @keyframes confettiFall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="bg-rainbow"></div>
+<div class="stars"></div>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">🌈</div>
+    <h1>Gay-O-Meter 3000™</h1>
+    <p>Powered by Absolutely Fake AI™</p>
+    <div class="badge">🔬 99.9% Scientifically Inaccurate</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">Question 1 of 8</div>
+
+  <!-- QUESTION CONTAINER -->
+  <div id="quiz-container">
+    <div class="card" id="question-card">
+      <!-- Dynamically loaded -->
+    </div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>
+      Continue →
+    </button>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading-screen">
+    <div class="card">
+      <span class="loading-spinner">🌈</span>
+      <div style="font-family:'Fredoka One',cursive; font-size:1.5rem; margin-bottom:10px;">Analyzing your gayness...</div>
+      <div class="loading-bar-wrap">
+        <div class="loading-bar" id="loadingBar"></div>
+      </div>
+      <div class="loading-steps" id="loadingStep">Connecting to Gay Satellite 🛸</div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result-screen">
+    <div class="card" style="padding:30px 24px;">
+      <div class="result-img-wrap" id="resultImgWrap">
+        <img class="result-img" id="resultImg" src="" alt="You">
+        <span class="result-avatar" id="resultAvatar">🧑</span>
+      </div>
+      <div class="result-title">OFFICIAL GAY SCORE™</div>
+      <div class="percent-wrap">
+        <div class="big-percent" id="bigPercent">0%</div>
+      </div>
+      <div class="result-meter">
+        <div class="meter-needle" id="meterNeedle" style="left:0%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:#888;font-weight:700;margin-bottom:16px;">
+        <span>0% (Straight as a board)</span>
+        <span>100% (ICONIC)</span>
+      </div>
+      <div class="result-roast" id="resultRoast"></div>
+      <div class="fun-fact" id="funFact"></div>
+    </div>
+    <button class="retry-btn" onclick="restartQuiz()">🔄 Test Another Friend</button>
+    <div class="share-row">
+      <button class="share-btn" onclick="copyResult()">📋 Copy Result</button>
+      <button class="share-btn" onclick="screenshot()">📸 Screenshot</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    type: 'upload',
+    q: 'Step 1: Upload a Photo for Facial Gay Analysis™',
+    sub: 'Our AI scans 247 facial micro-expressions for gayness signals 🔬',
+  },
+  {
+    type: 'options',
+    q: 'How do you react when you see a hot guy? 😏',
+    sub: 'Choose the most honest answer...',
+    options: [
+      { emoji: '😒', text: 'Nothing. Absolutely nothing.' },
+      { emoji: '👀', text: 'I look... just to assess the competition' },
+      { emoji: '😅', text: 'I look and then look away quickly' },
+      { emoji: '😍', text: 'I appreciate a good looking person' },
+    ]
+  },
+  {
+    type: 'options',
+    q: 'Pick your favorite movie genre 🎬',
+    sub: 'This tells us everything we need to know.',
+    options: [
+      { emoji: '💥', text: 'Action & Explosions' },
+      { emoji: '💅', text: 'Romantic Comedies / Drama' },
+      { emoji: '👻', text: 'Horror' },
+      { emoji: '🎭', text: 'Musicals & Broadway' },
+    ]
+  },
+  {
+    type: 'slider',
+    q: 'How many times did you check your hair in a mirror today? 💇',
+    sub: 'Be honest... the algorithm KNOWS.',
+    min: 0, max: 20,
+    labels: ['0 (liar)', '5', '10', '15', '20+']
+  },
+  {
+    type: 'options',
+    q: 'Be honest — how long does it take you to get ready? 🧖',
+    sub: 'Include outfit changes.',
+    options: [
+      { emoji: '⚡', text: '5 mins (splash water, done)' },
+      { emoji: '😐', text: '15-20 minutes' },
+      { emoji: '🕐', text: '45 mins - 1 hour' },
+      { emoji: '⏰', text: 'Over an hour (sometimes 2)' },
+    ]
+  },
+  {
+    type: 'options',
+    q: 'When you hear the song "Dancing Queen" 🎵',
+    sub: 'Your gut reaction?',
+    options: [
+      { emoji: '😑', text: 'What is that?' },
+      { emoji: '🎶', text: 'I know the song...' },
+      { emoji: '🕺', text: 'I hum it occasionally' },
+      { emoji: '💃', text: 'I KNOW ALL THE WORDS AND CHOREOGRAPHY' },
+    ]
+  },
+  {
+    type: 'options',
+    q: 'Someone compliments your outfit. You say: 👔',
+    sub: 'First instinct only.',
+    options: [
+      { emoji: '🤷', text: '"Thanks" and change the subject' },
+      { emoji: '😊', text: '"Oh this old thing? Thanks!"' },
+      { emoji: '😄', text: '"OMG thank you, I was so nervous about it!"' },
+      { emoji: '👑', text: '"I KNOW RIGHT?! I slayed today!"' },
+    ]
+  },
+  {
+    type: 'options',
+    q: 'Final question: Pick an emoji that describes you 🎯',
+    sub: 'Choose wisely. This counts for 40% of your score.',
+    options: [
+      { emoji: '🪨', text: '🪨 Rock. Solid. Unmovable.' },
+      { emoji: '🌊', text: '🌊 Go with the flow, baby' },
+      { emoji: '✨', text: '✨ Sparkle is my personality' },
+      { emoji: '🌈', text: '🌈 I am literally a rainbow' },
+    ]
+  }
+];
+
+let current = 0;
+let answers = [];
+let uploadedImg = null;
+let selectedOption = null;
+let sliderVal = 5;
+
+function buildQuestion() {
+  const q = questions[current];
+  const card = document.getElementById('question-card');
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.disabled = true;
+  selectedOption = null;
+
+  const progress = ((current) / questions.length) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+  document.getElementById('progressLabel').textContent = `Question ${current + 1} of ${questions.length}`;
+
+  let html = `<div class="q-number">Question ${current + 1} of ${questions.length}</div>
+               <div class="q-text">${q.q}</div>
+               <div class="q-sub">${q.sub}</div>`;
+
+  if (q.type === 'upload') {
+    html += `<div class="upload-area" onclick="triggerUpload()">
+      <input type="file" id="fileInput" accept="image/*" onchange="handleUpload(event)">
+      <div class="upload-icon">📸</div>
+      <div class="upload-text">Tap to upload a photo</div>
+    </div>
+    <img class="upload-preview" id="uploadPreview">
+    <div class="analyzing-text" id="analyzingText">🔬 Scanning face for gay micro-expressions...</div>`;
+  } else if (q.type === 'options') {
+    html += `<div class="options">`;
+    q.options.forEach((opt, i) => {
+      html += `<button class="option-btn" onclick="selectOption(${i}, this)">
+        <span class="option-emoji">${opt.emoji}</span>${opt.text}
+      </button>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'slider') {
+    html += `<div class="slider-container">
+      <div class="slider-val" id="sliderVal">5</div>
+      <input type="range" min="${q.min}" max="${q.max}" value="5" oninput="updateSlider(this.value)">
+      <div class="slider-labels"><span>${q.labels[0]}</span><span>${q.labels[2]}</span><span>${q.labels[4]}</span></div>
+    </div>`;
+    nextBtn.disabled = false;
+  }
+
+  card.innerHTML = html;
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'slideUp 0.4s ease';
+}
+
+function triggerUpload() {
+  document.getElementById('fileInput').click();
+}
+
+function handleUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    uploadedImg = ev.target.result;
+    const preview = document.getElementById('uploadPreview');
+    preview.src = uploadedImg;
+    preview.classList.add('show');
+    document.getElementById('analyzingText').style.display = 'block';
+    document.getElementById('analyzingText').textContent = '🔬 Detecting gay wavelengths... please wait';
+    setTimeout(() => {
+      document.getElementById('analyzingText').textContent = '✅ Face successfully analyzed! Suspiciously gay features detected.';
+      document.getElementById('nextBtn').disabled = false;
+    }, 2000);
+  };
+  reader.readAsDataURL(file);
+}
+
+function selectOption(i, el) {
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedOption = i;
+  document.getElementById('nextBtn').disabled = false;
+  answers.push(i);
+}
+
+function updateSlider(val) {
+  sliderVal = parseInt(val);
+  document.getElementById('sliderVal').textContent = val;
+  answers.push(sliderVal);
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showLoading();
+  } else {
+    buildQuestion();
+  }
+}
+
+const loadingSteps = [
+  'Connecting to Gay Satellite 🛸',
+  'Downloading Rainbow Database 🌈',
+  'Analyzing fashion sense... 👔',
+  'Cross-referencing with ABBA lyrics 🎵',
+  'Measuring glitter levels... ✨',
+  'Computing sparkle coefficient... 💅',
+  'Consulting the Gaydar 3000™ 📡',
+  'Finalizing your Gay Score™...',
+];
+
+function showLoading() {
+  document.getElementById('quiz-container').style.display = 'none';
+  document.getElementById('loading-screen').style.display = 'block';
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('progressLabel').textContent = 'Processing Results...';
+
+  let step = 0;
+  let barWidth = 0;
+  const bar = document.getElementById('loadingBar');
+  const stepEl = document.getElementById('loadingStep');
+
+  const interval = setInterval(() => {
+    barWidth += 100 / loadingSteps.length;
+    bar.style.width = barWidth + '%';
+    stepEl.textContent = loadingSteps[step];
+    step++;
+    if (step >= loadingSteps.length) {
+      clearInterval(interval);
+      setTimeout(showResult, 800);
+    }
+  }, 500);
+}
+
+const roasts = [
+  ["Under 30%", "Basically you're so straight you could be used as a ruler. Congratulations... or condolences? 📏"],
+  ["31–50%", "There's definitely SOMETHING happening in there. The algorithm spotted 'curious energy'. 👀"],
+  ["51–70%", "Oh honey. The data doesn't lie. Your sparkle index is OFF THE CHARTS. 💅✨"],
+  ["71–89%", "Wow. Just... wow. The Gay Satellite picked up your signal from SPACE. 🛸🌈"],
+  ["90–100%", "MAXIMUM GAYNESS DETECTED. You ARE the rainbow. LGBTQ+ called, they want their icon back. 👑🌈🎉"],
+];
+
+const funFacts = [
+  "Fun Fact™: This test has a ±99% margin of error. In other words, completely made up.",
+  "Disclaimer™: Sexuality is a spectrum and this app is 100% a joke. Share with friends for maximum roasting.",
+  "Science Note™: No actual AI was used. A random number generator was. The result is destiny. 🎲",
+  "Warning™: Results may cause uncontrollable laughing, embarrassment, and existential reflection.",
+  "Official Disclaimer™: Results scientifically meaningless. Emotionally devastating. Perfectly calibrated.",
+];
+
+function getResult(pct) {
+  if (pct <= 30) return roasts[0][1];
+  if (pct <= 50) return roasts[1][1];
+  if (pct <= 70) return roasts[2][1];
+  if (pct <= 89) return roasts[3][1];
+  return roasts[4][1];
+}
+
+let finalPercent = 0;
+
+function showResult() {
+  document.getElementById('loading-screen').style.display = 'none';
+  const rs = document.getElementById('result-screen');
+  rs.style.display = 'block';
+
+  finalPercent = Math.floor(Math.random() * 91) + 10;
+
+  if (uploadedImg) {
+    const img = document.getElementById('resultImg');
+    img.src = uploadedImg;
+    img.classList.add('show');
+    document.getElementById('resultAvatar').style.display = 'none';
+  }
+
+  // Animate percent counter
+  const el = document.getElementById('bigPercent');
+  el.style.opacity = 1;
+  let count = 0;
+  const inc = setInterval(() => {
+    count += Math.ceil(finalPercent / 40);
+    if (count >= finalPercent) { count = finalPercent; clearInterval(inc); }
+    el.textContent = count + '%';
+  }, 40);
+
+  // Needle
+  setTimeout(() => {
+    document.getElementById('meterNeedle').style.left = (finalPercent - 2) + '%';
+  }, 300);
+
+  document.getElementById('resultRoast').textContent = getResult(finalPercent);
+  document.getElementById('funFact').innerHTML = `📢 <span>${funFacts[Math.floor(Math.random() * funFacts.length)]}</span>`;
+
+  spawnConfetti();
+}
+
+function spawnConfetti() {
+  const colors = ['#ff6b6b','#ffa36c','#ffd93d','#6bcb77','#4d96ff','#c77dff','#fff'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    el.style.animationDelay = (Math.random() * 1) + 's';
+    el.style.width = (8 + Math.random() * 10) + 'px';
+    el.style.height = (8 + Math.random() * 10) + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4000);
+  }
+}
+
+function copyResult() {
+  const text = `🌈 Gay-O-Meter 3000™ Result: ${finalPercent}% Gay!\n${getResult(finalPercent)}\n\n(Test yourself at Gay-O-Meter 3000™ — Powered by Fake AI)`;
+  navigator.clipboard.writeText(text).then(() => alert('Copied! Send to your friend 😈'));
+}
+
+function screenshot() {
+  alert('📸 Take a screenshot manually and send it! Make sure your friend sees it! 😂');
+}
+
+function restartQuiz() {
+  current = 0; answers = []; uploadedImg = null; selectedOption = null; sliderVal = 5;
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('quiz-container').style.display = 'block';
+  document.getElementById('resultImg').classList.remove('show');
+  document.getElementById('resultAvatar').style.display = 'block';
+  buildQuestion();
+}
+
+// Init
+buildQuestion();
+</script>
+</body>
+</html>
